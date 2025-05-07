@@ -1,22 +1,18 @@
-const CACHE_NAME = "pwa-cache-v1";
-const FILES_TO_CACHE = [
+const CACHE_NAME = 'pwa-cache-v1';
+const urlsToCache = [
   '/',
-  'index.html',
-  'site.html',
-  '/site.html',
-  'app.js',
-  'manifest.json',
-  'https://unpkg.com/dexie@3.2.2/dist/dexie.min.js'
+  '/index.html',
+  '/page2.html',       // ← ajoute bien cette page ici
+  '/style.css',
+  '/app.js',
+  '/manifest.json',
+  '/icon.png'
 ];
 
-self.addEventListener("install", event => {
+self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
-  );
-});
-
-self.addEventListener("fetch", event => {
-  event.respondWith(
-    caches.match(event.request).then(response => response || fetch(event.request))
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(urlsToCache);
+    })
   );
 });
