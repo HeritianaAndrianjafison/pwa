@@ -5,17 +5,31 @@ const FILES_TO_CACHE = [
   'page_2.html',
   'app.js',
   'manifest.json',
-  'https://unpkg.com/dexie@3.2.2/dist/dexie.min.js'
+  'offline.html', // Ajoute cette page dans le cache
+  'dexie.min.js'
 ];
 
+// INSTALLATION : mise en cache des fichiers
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(FILES_TO_CACHE);
+    })
   );
 });
 
+// FETCH : gestion des requêtes et du mode offline
 self.addEventListener("fetch", event => {
   event.respondWith(
-    caches.match(event.request).then(response => response || fetch(event.request))
+    caches.match(event.request).then(response => {
+      // Si trouvé dans le cache, on retourne la version offline
+      if (response) return response;
+
+      // Sinon, on essaie d'aller chercher sur le réseau
+      return fetch(event.request).catch(() => {
+        // En cas d'échec (hors ligne), on affiche une page par défaut
+        return caches.match('/offline.html');
+      });
+    })
   );
 });
