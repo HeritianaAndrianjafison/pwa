@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Login PWA Offline</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <h1>Inscription</h1>
+  <form id="registerForm">
+    <input type="text" id="reg_username" placeholder="Nom d'utilisateur" required>
+    <input type="password" id="reg_password" placeholder="Mot de passe" required>
+    <button type="submit">Créer un compte</button>
+  </form>
+
+  <h1>Connexion</h1>
+  <form id="loginForm">
+    <input type="text" id="login_username" placeholder="Nom d'utilisateur" required>
+    <input type="password" id="login_password" placeholder="Mot de passe" required>
+    <button type="submit">Se connecter</button>
+  </form>
+
+  <button id="installBtn" style="">Installer l'application</button>
+
+
+  <p id="message"></p>
+
+  <script src="https://unpkg.com/dexie@3.2.2/dist/dexie.min.js"></script>
+  <script src="app.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let deferredPrompt = null;
+        const installBtn = document.getElementById('installBtn');
+        
+        // Par défaut, désactiver le bouton si l'événement n'a pas encore eu lieu
+        installBtn.disabled = true;
+        
+        // Écouter l’événement beforeinstallprompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+          e.preventDefault(); // Empêche la bannière automatique
+          deferredPrompt = e; // Sauvegarde l'événement
+          installBtn.disabled = false; // Active le bouton
+          console.log("PWA installable !");
+        });
+        
+        // Action quand on clique sur le bouton
+        installBtn.addEventListener('click', async () => {
+          if (!deferredPrompt) {
+            alert("Installation non disponible actuellement !");
+            return;
+          }
+        
+          deferredPrompt.prompt(); // Demander l’installation
+        
+          const choice = await deferredPrompt.userChoice;
+          if (choice.outcome === 'accepted') {
+            console.log("L'utilisateur a accepté !");
+          } else {
+            console.log("L'utilisateur a refusé.");
+          }
+        
+          deferredPrompt = null;
+          installBtn.disabled = true; // Cacher ou désactiver le bouton
+        });
+        
+    });
+  </script>
+</body>
+</html>
