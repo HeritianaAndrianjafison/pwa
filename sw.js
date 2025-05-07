@@ -6,7 +6,8 @@ const FILES_TO_CACHE = [
   'app.js',
   'manifest.json',
   'offline.html', // Ajoute cette page dans le cache
-  'dexie.min.js'
+  'dexie.min.js',
+  'icon-192.png'
 ];
 
 // INSTALLATION : mise en cache des fichiers
