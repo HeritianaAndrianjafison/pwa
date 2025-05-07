@@ -35,6 +35,7 @@ document.getElementById("loginForm").addEventListener("submit", async e => {
 
   if (user) {
     document.getElementById("message").textContent = "Connexion réussie (offline) !";
+    window.location.href = "page_2.html";
   } else {
     document.getElementById("message").textContent = "Identifiants invalides.";
   }
