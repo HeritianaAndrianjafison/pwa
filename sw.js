@@ -2,6 +2,7 @@ const CACHE_NAME = "pwa-cache-v1";
 const FILES_TO_CACHE = [
   '/',
   'index.html',
+  'site.html',
   'app.js',
   'manifest.json',
   'https://unpkg.com/dexie@3.2.2/dist/dexie.min.js'
